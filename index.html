@@ -78,13 +78,14 @@
           };
 
         $(window)
-            .bind('mousedown', function (e) {
-                mouse.set(e.clientX, e.clientY);
-                line = null;
-                $(window)
-                    .bind('mousemove', drag)
-                    .bind('mouseup', dragEnd);
-				.bind('touchstart', function(e) {
+            .bind('mousedown', function(e) {
+              mouse.set(e.clientX, e.clientY);
+              line = null;
+              $(window)
+                .bind('mousemove', drag)
+                .bind('mouseup', dragEnd);
+            })
+            .bind('touchstart', function(e) {
               e.preventDefault();
               var touch = e.originalEvent.changedTouches[0];
               mouse.set(touch.pageX, touch.pageY);
