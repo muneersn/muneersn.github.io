@@ -96,8 +96,8 @@
             e.preventDefault();
             var touch = e.originalEvent.changedTouches[0];
             drag({
-              clientX: touch.pageX - 5,
-              clientY: touch.pageY - heightOfElem - 7
+              clientX: touch.pageX,
+              clientY: touch.pageY
             });
             return false;
           };
