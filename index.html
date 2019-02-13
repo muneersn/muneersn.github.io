@@ -5,16 +5,48 @@
     <title>Two.js</title>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/two.js/0.6.0/two.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://two.js.org/third-party/url.js"></script>
 </head>
 
 <body>
+	<div id="top">
+		<a id="svgLink" href="#">SVG</a>
+		<a id="canvasLink" href="#">Canvas</a>
+		<a id="webglLink" href="#">Webgl</a>
+	</div>
     <div id="drawing"></div>
+	<div class="scripts">
     <script>
-        var x, y, line, mouse = new Two.Vector();
-        var centerX = window.innerWidth / 2;
-        var centerY = window.innerHeight / 2;
-        var elem = document.getElementById("drawing");
-        var two = new Two({ fullscreen: true }).appendTo(elem);
+	
+		$('#svgLink').click(function(){
+			location.href = location.origin + location.pathname + '?type=svg';
+		});
+		$('#canvasLink').click(function(){
+			location.href = location.origin + location.pathname + '?type=canvas';
+		});
+		$('#webglLink').click(function(){
+			location.href = location.origin + location.pathname + '?type=webgl';
+		});
+		
+		function reload(destination) {
+			location.href = location.origin + location.pathname + '?type=' + destination;
+		}
+	
+		var type = url.type;
+		if(type == undefined) {
+			type = "svg";
+		}
+		
+		var x, y, line, mouse = new Two.Vector();
+		var topElement = document.getElementById('top');
+		var heightOfElem = topElement.offsetHeight;
+		var two = new Two({
+          type: Two.Types[url.type],
+          fullscreen: false,
+          autostart: true,
+		  width: window.innerWidth,
+		  height: window.innerHeight - heightOfElem
+        }).appendTo(document.querySelector('#drawing'));
 
         function makePoint(x, y) {
             if (arguments.length <= 1) {
@@ -49,7 +81,7 @@
         };
 		
 		var dragEnd = function (e) {
-            $(window)
+            $('#drawing')
                 .unbind('mousemove', drag)
                 .unbind('mouseup', dragEnd);
         };
@@ -71,17 +103,18 @@
 
           var touchEnd = function(e) {
             e.preventDefault();
-            $(window)
+            $('#drawing')
               .unbind('touchmove', touchDrag)
               .unbind('touchend', touchEnd);
             return false;
           };
 
-        $(window)
+		
+        $('#drawing')
             .bind('mousedown', function(e) {
               mouse.set(e.clientX, e.clientY);
               line = null;
-              $(window)
+              $('#drawing')
                 .bind('mousemove', drag)
                 .bind('mouseup', dragEnd);
             })
@@ -90,12 +123,13 @@
               var touch = e.originalEvent.changedTouches[0];
               mouse.set(touch.pageX, touch.pageY);
               line = null;
-              $(window)
+              $('#drawing')
                 .bind('touchmove', touchDrag)
                 .bind('touchend', touchEnd);
               return false;
             });
     </script>
+	</div>
 </body>
 
 </html>
