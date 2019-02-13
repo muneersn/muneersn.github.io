@@ -39,7 +39,7 @@
 		
 		var x, y, line, mouse = new Two.Vector();
 		var topElement = document.getElementById('top');
-		var heightOfElem = topElement.offsetHeight;
+		var heightOfElem = topElement.clientHeight;
 		var two = new Two({
           type: Two.Types[url.type],
           fullscreen: false,
@@ -47,7 +47,8 @@
 		  width: window.innerWidth,
 		  height: window.innerHeight - heightOfElem
         }).appendTo(document.querySelector('#drawing'));
-
+		two.renderer.setSize(window.innerWidth, window.innerHeight - heightOfElem);
+		
         function makePoint(x, y) {
             if (arguments.length <= 1) {
                 y = x.y;
@@ -62,7 +63,7 @@
 
         var drag = function (e) {
             x = e.clientX;
-            y = e.clientY;
+            y = e.clientY - heightOfElem;
             if (!line) {
                 var v1 = makePoint(mouse);
                 var v2 = makePoint(x, y);
@@ -96,7 +97,7 @@
             var touch = e.originalEvent.changedTouches[0];
             drag({
               clientX: touch.pageX,
-              clientY: touch.pageY
+              clientY: touch.pageY - heightOfElem
             });
             return false;
           };
