@@ -47,18 +47,8 @@
             }
             mouse.set(x, y);
         };
-
-        $(window)
-            .bind('mousedown', function (e) {
-                mouse.set(e.clientX, e.clientY);
-                line = null;
-                $(window)
-                    .bind('mousemove', drag)
-                    .bind('mouseup', dragEnd);
-                return false;
-            });
-
-        var dragEnd = function (e) {
+		
+		var dragEnd = function (e) {
             $(window)
                 .unbind('mousemove', drag)
                 .unbind('mouseup', dragEnd);
@@ -68,7 +58,43 @@
             .bind("update", function (frameCount) {
             })
             .play();
+		
+		var touchDrag = function(e) {
+            e.preventDefault();
+            var touch = e.originalEvent.changedTouches[0];
+            drag({
+              clientX: touch.pageX,
+              clientY: touch.pageY
+            });
+            return false;
+          };
 
+          var touchEnd = function(e) {
+            e.preventDefault();
+            $(window)
+              .unbind('touchmove', touchDrag)
+              .unbind('touchend', touchEnd);
+            return false;
+          };
+
+        $(window)
+            .bind('mousedown', function (e) {
+                mouse.set(e.clientX, e.clientY);
+                line = null;
+                $(window)
+                    .bind('mousemove', drag)
+                    .bind('mouseup', dragEnd);
+                return false;
+				.bind('touchstart', function(e) {
+              e.preventDefault();
+              var touch = e.originalEvent.changedTouches[0];
+              mouse.set(touch.pageX, touch.pageY);
+              line = null;
+              $(window)
+                .bind('touchmove', touchDrag)
+                .bind('touchend', touchEnd);
+              return false;
+            });
     </script>
 </body>
 
