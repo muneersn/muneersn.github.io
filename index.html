@@ -14,7 +14,7 @@
 		<a id="canvasLink" href="#">Canvas</a>
 		<a id="webglLink" href="#">Webgl</a>
 	</div>
-    <div id="drawing"></div>
+    <div id="drawing" style="cursor: crosshair"></div>
 	<div class="scripts">
     <script>
 	
@@ -39,7 +39,7 @@
 		
 		var x, y, line, mouse = new Two.Vector();
 		var topElement = document.getElementById('top');
-		var heightOfElem = topElement.clientHeight;
+		var heightOfElem = topElement.offsetHeight;
 		var two = new Two({
           type: Two.Types[url.type],
           fullscreen: false,
@@ -62,8 +62,8 @@
         }
 
         var drag = function (e) {
-            x = e.clientX;
-            y = e.clientY - heightOfElem;
+            x = e.clientX - 5;
+            y = e.clientY - heightOfElem - 7;
             if (!line) {
                 var v1 = makePoint(mouse);
                 var v2 = makePoint(x, y);
@@ -96,8 +96,8 @@
             e.preventDefault();
             var touch = e.originalEvent.changedTouches[0];
             drag({
-              clientX: touch.pageX,
-              clientY: touch.pageY - heightOfElem
+              clientX: touch.pageX - 5,
+              clientY: touch.pageY - heightOfElem - 7
             });
             return false;
           };
